@@ -8,4 +8,12 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+## Outline: 
+Analyses relating to DELFI followup projects.
+
+
+1. [Brief introduction to Rcpp](intro.html)
+1. [Building a package](5mb_nuclease.html)
+1. [Case study: Skew Normal Mixture distributions](sn_mix.html)
+
+## Using workflowr
