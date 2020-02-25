@@ -436,16 +436,18 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomscristiaRcppComputingClubtree87d1bc8980a3ccab4d833e96e9c26b90f830c44etargetblank87d1bc8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/scristia/RcppComputingClub/tree/87d1bc8980a3ccab4d833e96e9c26b90f830c44e" target="_blank">87d1bc8</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomscristiaRcppComputingClubtree478270dee556cb7f206f1ee611e08c3fe95578bctargetblank478270da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/scristia/RcppComputingClub/tree/478270dee556cb7f206f1ee611e08c3fe95578bc" target="_blank">478270d</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomscristiaRcppComputingClubtree87d1bc8980a3ccab4d833e96e9c26b90f830c44etargetblank87d1bc8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomscristiaRcppComputingClubtree478270dee556cb7f206f1ee611e08c3fe95578bctargetblank478270da" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
-working directory clean
+Unstaged changes:
+    Modified:   analysis/index.Rmd
+
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
@@ -483,6 +485,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/scristia/RcppComputingClub/blob/478270dee556cb7f206f1ee611e08c3fe95578bc/analysis/packages.Rmd" target="_blank">478270d</a>
+</td>
+<td>
+scristia
+</td>
+<td>
+2020-02-25
+</td>
+<td>
+wflow_publish(files = “packages.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/scristia/RcppComputingClub/303d980903b68fcfb02c4d3785bc1378b6f1e0ef/docs/packages.html" target="_blank">303d980</a>
+</td>
+<td>
+scristia
+</td>
+<td>
+2020-02-25
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -527,13 +563,21 @@ wflow_git_commit(all = TRUE, files = c(“index.Rmd”, “intro.Rmd”,
 </ul>
 <div id="devtools" class="section level2">
 <h2>devtools</h2>
+<ul>
+<li><tt>devtools::use_rcpp()</tt> to set your package up with Rcpp. This will
+<ul>
+<li>create a src/ directory for your compiled code</li>
+<li>Add Rcpp to the LinkingTo and Imports fields in the DESCRIPTION.</li>
+<li>Set up your .gitignore to ignore compiled output files</li>
+<li>Give you roxygen flags to add to your package</li>
+</ul></li>
+</ul>
+<p>roxygen can be used to add documentation to your C++ written functions in the usual with, but with <tt>//‘</tt> instead of <tt>#’</tt>.</p>
 </div>
+<div id="exportingimporting-c-code" class="section level2">
+<h2>Exporting/importing C++ code</h2>
+<p>Use header (.h) files to make your C++ functions callable elsewhere.</p>
 </div>
-<div id="starting-an-rcpp-project" class="section level1">
-<h1>Starting an Rcpp Project</h1>
-</div>
-<div id="documentation" class="section level1">
-<h1>Documentation</h1>
 </div>
 
 
