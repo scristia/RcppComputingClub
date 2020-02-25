@@ -1,0 +1,377 @@
+---
+title: "Rcpp Introduction"
+Author: "Stephen Cristiano"
+output:
+  workflowr::wflow_html:
+    toc: true
+editor_options:
+  chunk_output_type: console
+---
+
+<!-- cache all Rcpp source chunks in single compilation --> 
+```{Rcpp, ref.label=knitr::all_rcpp_labels(), include=FALSE}
+```
+
+
+```{Rcpp, eval=FALSE}
+#include <RcppArmadillo.h>
+// Note #include <Rcpp.h> implied by RcppArmadillo.
+using namespace Rcpp;
+```
+
+# What is Rcpp
+
+* Rcpp: Seamless integration between <tt> R </tt> and <tt> C++ </tt>
+* Extremely simple to connect <tt> C++ </tt> with <tt> R </tt>. <tt> Rcpp </tt>
+  Library in <tt> C++ </tt> enables <tt> R </tt>-like syntax and operations on
+  imported objects from <tt> R </tt>.
+* Maintained by Dirk Eddelbuetter and Romain Francois
+* Well supported by Rstudio.
+* Supported by <tt> knitr </tt> as well (<tt> rcpp </tt> in code chunk header).
+  * See source of this <tt> Rmd </tt> for example how to cache all Rcpp source
+    chunks into a single compilation unit.
+* Supports any C++ language standard the underlying compiler supports: C++98, C++11, C++14, C++17
+  * Packages using Rcpp can deploy standards suppported by R: C++, C++11 and very soon C++14
+
+## Simple examples
+Let's begin by examining to very simple examples of calling <tt> C++ </tt>
+functions within <tt> R </tt>:
+
+```{Rcpp, echo=TRUE, eval=FALSE}
+// [[Rcpp::export]]
+int square(int x) {
+    return x*x;
+}
+
+// [[Rcpp::export]]
+int add(int x, int y, int z) {
+    int sum = x + y + z;
+    return sum;
+}
+```
+
+Note the <tt> // [[Rcpp::export]] </tt> line allows the function to be 
+exported into <tt> R </tt>. Within <tt> R </tt>, I can now call:
+
+```{r}
+square(7L)
+add(1, 2, 3)
+```
+It is very straightforward to call the <tt>C++</tt> implemented function
+within <tt>R</tt>. The motivation behind <tt>Rcpp</tt> comes when you
+run into a computation in <tt>R</tt> that create a performance bottleneck
+in your code. By instead writing your function in <tt>C++</tt>, you can
+achieve a massive speed boost. <tt>Rcpp</tt> seeks to make the interaction
+between <tt>R</tt> and <tt>C++</tt> as seamless and convenient as possible.
+
+## Using cppFunction
+It can be even easier to parse C++ code in R
+```{r cppfunction}
+Rcpp::cppFunction('double accu(NumericVector x) { return(
+      std::accumulate(x.begin(), x.end(), 0.0)
+   );
+}')
+res <- accu(seq(1, 10, by=0.5))
+res
+```
+<tt>cppFunction</tt> parses C++ code and compiles it for use within R.
+If you have an external .cpp file you want to call within R, can use `sourceCpp`.
+
+## Why C++?
+
+* One of the most frequently used programming languages in the world.
+* Speed.
+* Good chance what you want is already implemented in <tt>C++</tt>
+* From wikipedia: ‘<tt>C++</tt> is a statically typed, free-form, multi-paradigm,
+  compiled, general-purpose, powerful programming language.’
+
+## Why not C++?
+
+* More difficult to debug
+* More difficult to modify
+* The The population of potentials users who understand both R and C++ is smaller.
+
+## Why Rcpp?
+* Easy to use (honest).
+* Clean and approachable API that enable for high performance code.
+* R style vectorized code at C++ level.
+* Programmer time vs computer time: much more efficient code that does not take
+  much longer to write.
+* Enables access to advanced data structures and algorithms implemented in C++
+  but not provided by R.
+  * *eg* STL (C++ Standard Template Library), Boost
+* Handles garbage collection and the Rcpp programmer should never have to worry
+  about memory allocation and deallocation.
+* If you are developing a package and you want people to use that package, you
+  probably want it to be fast.
+
+# Quick C++ primer
+Here's a 2-minute C++ introduction:
+```{Rcpp, echo=TRUE, eval=FALSE}
+// This is a comment
+/* Also this */
+
+// [[Rcpp::export]]
+double sumC(NumericVector x) {
+    int n = x.size();
+    double total = 0;
+    for(int i = 0; i < n; ++i) {
+        total += x[i]; if(total > 100) break;
+    }
+    return total;
+}
+```
+
+```{r}
+sumC(seq(1:10))
+```
+
+Notice the following things about C++:
+
+* Need to initialize your variables with data type.
+* for loops of structure for(initialization; condition; increment).
+* Conditionals are the same as R.
+* End every statement with a semicolon;
+* Vectors and arrays are 0-indexed.
+* <tt>size()</tt> is a member function on the vector class - <tt>x.size()</tt>
+  returns the size of x. 
+* We also saw previously you can call a function from a particular C++ library
+  with <tt>::</tt> (<tt>std::accumulate</tt>), similar to R.
+* While <tt>C++</tt> can be a very complex language, just knowing these will
+  enable you to write faster R functions.
+
+# Rcpp Basics
+
+A quick introduction to Rcpp objects and operations:
+
+## Data structures
+
+* All R objects are internally represented by a SEXP: a pointer to an S expression object.
+* Any R object can be passed down to C++ code: vectors, matrices lists. Even functions and environments.
+* A large number of user-visible classes for R objects, which contain pointers the the SEXP object.
+  * IntegerVector
+  * NumericVector
+  * LogicalVector
+  * CharacterVector
+  * NumericMatrix
+  * S4
+  * and many more
+
+## Rcpp Sugar
+
+* Rcpp sugar brings a higher level of abstraction to C++ code written in Rcpp.
+* Avoid C++ loops with code that strongly resembles R.
+* Takes advantage of operator overloading.
+* Despite the similar syntax, peformance is much faster in C++, though not
+  quite as fast as manually optimized C++ code.
+
+Example:
+```{Rcpp sugar, eval=FALSE}
+// Rcpp implementation
+// [[Rcpp::export]]
+NumericVector pdistCpp(double x, NumericVector ys) {
+    return pow((x-ys), 2);
+}
+```
+```{r sugar2}
+# R implementation
+pdistR <- function(x, ys) {
+    (x - ys)^2
+}
+
+pdistR(5.0, c(4.1, -9.3, 0, 13.7))
+pdistCpp(5.0, c(4.1, -9.3, 0, 13.7))
+```
+Note the similarity of the Rcpp and R implementations. Rcpp performs R styled
+vectorizations.
+
+## Logical Operators
+```{c, eval=FALSE}
+// two integer vectors of the same size
+NumericVector x;
+NumericVector y;
+// expressions involving two vectors
+LogicalVector res = x < y;
+LogicalVector res = x != y;
+// one vector, one single value
+LogicalVector res = x < 2;
+// two expressions
+LogicalVector res = (x + y) == (x*x);
+// functions producing single boolean result
+all(x*x < 3);
+any(x*x < 3);
+```
+
+## R-like functions
+There are many functions similar to what exists inside R:
+```{c, eval=FALSE}
+is_na(x);
+seq_along(x);
+sapply( seq_len(10), square<int>() );
+ifelse( x < y, x, (x+y)*y );
+pmin( x, x*x);
+diff( xx );
+intersect( xx, yy); //returns interserct of two vectors
+unique( xx ); // subset of unique values in input vecto
+
+// math functions
+abs(x); exp(x); log(x); ceil(x);
+sqrt(x); sin(x); gamma(x);
+range(x);
+mean(x); sd(x); var(x);
+which_min(x); which_max(x);
+// A bunch more
+```
+
+## Density and RNG functions
+
+Rcpp has access to the same density, distribution, and RNG functions used by R
+itself. The seed you set in R will even be passed into Rcpp. For example, you
+can draw from a gamma distribution with scale and shape parameters equal to 1 with:
+
+```{Rcpp gamma, eval=FALSE}
+RNGScope scope;
+// [[Rcpp::export]]
+NumericVector getRGamma() {
+            NumericVector x = rgamma( 10, 1, 1 );
+            return x;
+}
+```
+```{r rgamma}
+set.seed(1234)
+getRGamma()
+set.seed(1234)
+rgamma(10, 1, 1)
+```
+
+
+## Printing to console:
+Don't use <tt>stdout</tt> and <tt>stderr</tt> as you would in C++. Instead,
+use <tt>Rcpp::Rcout</tt> or <tt>Rcpp::print</tt>.
+
+```{Rcpp, eval=FALSE}
+// [[Rcpp::export]]
+void useOperatorOnVector(NumericVector x) { 
+    Rcpp::Rcout << "Rcpp vector is " << std::endl << x << std::endl;
+}
+
+
+// [[Rcpp::export]]
+void callPrint(RObject x) { 
+    Rcpp::print(x);             // will work on any SEXP object
+}
+```
+```{r}
+v <- seq(0.0, 10.0, by=2.5)
+useOperatorOnVector(v)
+callPrint(v)
+```
+
+
+## Be careful with pointers!
+```{Rcpp, eval=FALSE}
+// [[Rcpp::export]]
+NumericVector logRcpp1(NumericVector invec) {
+    NumericVector outvec(invec);
+    for(int i=0; i<invec.size(); i++) {
+        outvec[i] = log(invec[i]);
+    }
+    return outvec;
+}
+```
+
+```{r}
+x <- seq(1.0, 3.0, by=1)
+cbind(x, logRcpp1(x))
+```
+Note: outvec and invec point to the same underlying R object.
+
+Instead, Use clone to not modify original vector.
+```{Rcpp, eval=FALSE}
+// [[Rcpp::export]]
+NumericVector logRcpp2(NumericVector invec) {
+    NumericVector outvec=clone(invec);
+    for(int i=0; i<invec.size(); i++) {
+        outvec[i] = log(invec[i]);
+    }
+    return outvec;
+}
+```
+```{r}
+x <- seq(1.0, 3.0, by=1)
+cbind(x, logRcpp2(x))
+```
+
+# RcppArmadillo
+
+* Armadillo is a high level and easy to use C++ linear algebra library with
+  syntax similar to Matlab.
+* RcppArmadillo is an Rcpp interface allowing access to the Armadillo library.
+* Supports a large body of linear algebra functions.
+
+```{Rcpp, eval=FALSE}
+#include <RcppArmadillo.h>
+
+// [[Rcpp::depends(RcppArmadillo)]]
+
+// [[Rcpp::export]]
+void showMatrix(arma::mat X) {
+    Rcout << "Armadillo matrix is" << std::endl << X << std::endl;
+}
+
+// [[Rcpp::export]]
+List svd_arma(arma::mat x) {
+    arma::mat xtx = x.t() * x ;
+    arma::mat U ;
+    arma::vec s ;
+    arma::mat V ;
+    svd(U, s, V, xtx) ;
+    List ret ;
+    ret["U"] = U ;
+    ret["s"] = s ;
+    ret["V"] = V ;
+    return(ret) ;
+}
+```
+
+```{r}
+M <- matrix(1:9,3,3)
+showMatrix(M)
+
+## SVD implemented in Armadillo
+svd_arma(M)
+```
+Note above was an example of returning multiple objects to R in a list.
+
+
+# Do you need Rcpp?
+
+Before using `Rcpp` in your package, you should first consider if it's
+necessary.
+
+
+## Typical R bottlenecks
+
+* Loops that depend on previous iterations
+  * MCMC methods, EM Algorithm, gradient descent...
+* Function calls in R slow, but very little overhead in C++.
+  * Recursive functions are very inefficient in R.
+* Not having access to advanced data structures algorithms in R but available in C++.
+
+## When is Rcpp not the solution?
+
+* Sometimes the solution is to become a better R coder.
+* Take advantage of vectorization when possible.
+* Most base R functions already call C functions. Make sure there isn’t already
+  an efficient implementation of what you are trying to do.
+* If your bottleneck is with manipulating large rectangular data (*ie* over
+  1 million rows or thousands of columns), consider <tt>data.table</tt>.
+
+# Other resources
+
+* vignette("Rcpp-quickref")
+* `Seamless R and C++ integration with Rcpp' by Dirk Eddelbuettel. Excellent book for learning Rcpp. Available for free through JHU library.
+* Hadley Wickham's Rcpp tutorial: http://adv-r.had.co.nz/Rcpp.html
+* FAQ: https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-FAQ.pdf
+* A huge number of examples at http://gallery.rcpp.org
+* Stack exchange.
