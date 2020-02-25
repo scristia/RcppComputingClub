@@ -76,6 +76,13 @@ res
 ```
 <tt>cppFunction</tt> parses C++ code and compiles it for use within R.
 If you have an external .cpp file you want to call within R, can use `sourceCpp`.
+You can also evaluate a single C++ statement with <tt>evalCpp()</tt>
+
+```{r evalcpp}
+# Showing maximum value of double.
+Rcpp::evalCpp('std::numeric_limits<double>::max()')
+```
+
 
 ## Why C++?
 
@@ -374,4 +381,5 @@ necessary.
 * Hadley Wickham's Rcpp tutorial: http://adv-r.had.co.nz/Rcpp.html
 * FAQ: https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-FAQ.pdf
 * A huge number of examples at http://gallery.rcpp.org
+* [Rcpp for Everyone](https://teuder.github.io/rcpp4everyone_en/)
 * Stack exchange.

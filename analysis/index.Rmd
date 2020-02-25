@@ -8,12 +8,20 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Outline: 
-Analyses relating to DELFI followup projects.
+### Avoiding R bottlenecks with Rcpp
 
+I will introduce the Rcpp package for streamlining R code with C++ functions
+to avoid some common computational bottlenecks when writing R functions in a
+manner that's easy to use with minimal C++ knowledge. During the presentation,
+I will provide an example of developing a package with compiled code and
+demonstrate the "workflowr" package for organizing your projects into a
+version controlled website for documenting your results.
+
+This document is broken into three main sections: 
 
 1. [Brief introduction to Rcpp](intro.html)
-1. [Building a package](5mb_nuclease.html)
+1. [Building a package](packages.html)
 1. [Case study: Skew Normal Mixture distributions](sn_mix.html)
 
 ## Using workflowr
+This document was created using <tt>workflowr</tt>.
