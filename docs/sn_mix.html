@@ -426,16 +426,18 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomscristiaRcppComputingClubtree87d1bc8980a3ccab4d833e96e9c26b90f830c44etargetblank87d1bc8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/scristia/RcppComputingClub/tree/87d1bc8980a3ccab4d833e96e9c26b90f830c44e" target="_blank">87d1bc8</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomscristiaRcppComputingClubtree3bb9b3a475bd705651a1d7d70fd2036378471fe4targetblank3bb9b3aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/scristia/RcppComputingClub/tree/3bb9b3a475bd705651a1d7d70fd2036378471fe4" target="_blank">3bb9b3a</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomscristiaRcppComputingClubtree87d1bc8980a3ccab4d833e96e9c26b90f830c44etargetblank87d1bc8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomscristiaRcppComputingClubtree3bb9b3a475bd705651a1d7d70fd2036378471fe4targetblank3bb9b3aa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
-working directory clean
+Unstaged changes:
+    Modified:   analysis/index.Rmd
+
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
@@ -473,6 +475,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/scristia/RcppComputingClub/blob/3bb9b3a475bd705651a1d7d70fd2036378471fe4/analysis/sn_mix.Rmd" target="_blank">3bb9b3a</a>
+</td>
+<td>
+scristia
+</td>
+<td>
+2020-02-25
+</td>
+<td>
+wflow_publish(files = “sn_mix.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/scristia/RcppComputingClub/303d980903b68fcfb02c4d3785bc1378b6f1e0ef/docs/sn_mix.html" target="_blank">303d980</a>
+</td>
+<td>
+scristia
+</td>
+<td>
+2020-02-25
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -537,42 +573,18 @@ pre { /* Code block - determines code spacing between lines */
   \phi\left( \frac{y - \xi}{\omega}\right) \Phi(\alpha \omega^{-1}(y - \xi))
 \]</span> where <span class="math inline">\(\alpha\)</span> is a skewness parameter.</p>
 <p>Full conditionals are available for the proper parameter transformations and Gibbs sampling is still feasible. See ‘Bayesian inference for finite mixtures of univariate and multivariate skew-normal and skew-t distributions.’ by Früwirth-Schnatter, Pyne (2010) for derivations and greater detail.</p>
+<p>See github.com/scristia/SkewNormalMix for an implementation of this model.</p>
 <pre class="r"><code># Load packages
-library(tidyverse)</code></pre>
-<pre><code>── Attaching packages ────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
-<pre><code>✔ ggplot2 3.2.1     ✔ purrr   0.3.2
-✔ tibble  2.1.3     ✔ dplyr   0.8.3
-✔ tidyr   1.0.0     ✔ stringr 1.4.0
-✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
-<pre><code>── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(devtools)</code></pre>
-<pre><code>Loading required package: usethis</code></pre>
-<pre class="r"><code>#install_github(&quot;scristia/SkewNormalMix&quot;)
-load_all(&quot;~/Software/SkewNormalMix&quot;)</code></pre>
-<pre><code>Loading SkewNormalMix</code></pre>
-<pre><code>Loading required package: Rcpp</code></pre>
-<pre><code>Loading required package: RcppArmadillo</code></pre>
-<pre class="r"><code>library(sn)</code></pre>
-<pre><code>Loading required package: stats4</code></pre>
-<pre><code>
-Attaching package: &#39;sn&#39;</code></pre>
-<pre><code>The following object is masked from &#39;package:SkewNormalMix&#39;:
+library(tidyverse)
+library(devtools)
+#install_github(&quot;scristia/SkewNormalMix&quot;)
+load_all(&quot;~/Software/SkewNormalMix&quot;)
 
-    dsn</code></pre>
-<pre><code>The following object is masked from &#39;package:stats&#39;:
-
-    sd</code></pre>
-<pre class="r"><code>library(mvtnorm)
+library(sn)
+library(mvtnorm)
 library(msm)
-library(MASS)</code></pre>
-<pre><code>
-Attaching package: &#39;MASS&#39;</code></pre>
-<pre><code>The following object is masked from &#39;package:dplyr&#39;:
-
-    select</code></pre>
-<pre class="r"><code>library(gtools)
+library(MASS)
+library(gtools)
 library(truncnorm)</code></pre>
 <pre class="r"><code># simulated data
 omega &lt;- c(4, 1)
@@ -585,6 +597,43 @@ xx &lt;- xx[sample.int(8000)]
 par(bg=&quot;white&quot;)
 plot(density(xx), type=&quot;l&quot;)</code></pre>
 <p><img src="figure/sn_mix.Rmd/simulate_data-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-simulate_data-1">
+Past versions of simulate_data-1.png
+</button>
+</p>
+<div id="fig-simulate_data-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/scristia/RcppComputingClub/blob/303d980903b68fcfb02c4d3785bc1378b6f1e0ef/docs/figure/sn_mix.Rmd/simulate_data-1.png" target="_blank">303d980</a>
+</td>
+<td>
+scristia
+</td>
+<td>
+2020-02-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>n &lt;- length(xx)
 
 
@@ -594,7 +643,8 @@ Ey &lt;- mu+omega2*delta*sqrt(2/3.1415)
 psi &lt;- omega*delta
 sigma2 &lt;- omega2*(1-delta^2)
 K = 2
-nsim=10000
+# nsim=10000
+nsim=2000
 burnin &lt;- 1:500</code></pre>
 <p>R implementation of function:</p>
 <pre class="r"><code>set.seed(4321)
@@ -612,6 +662,43 @@ alphas2 &lt;- colMeans(res2$ALPHA[-burnin, ])
 etas2 &lt;- colMeans(res2$ETA[-burnin, ])</code></pre>
 <p>Check posterior fit:</p>
 <p><img src="figure/sn_mix.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/scristia/RcppComputingClub/blob/303d980903b68fcfb02c4d3785bc1378b6f1e0ef/docs/figure/sn_mix.Rmd/unnamed-chunk-3-1.png" target="_blank">303d980</a>
+</td>
+<td>
+scristia
+</td>
+<td>
+2020-02-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Check truth:</p>
 <table>
 <thead>
@@ -632,8 +719,8 @@ etas2 &lt;- colMeans(res2$ETA[-burnin, ])</code></pre>
 <tr class="even">
 <td align="left">mu2</td>
 <td align="right">4.000</td>
-<td align="right">4.03</td>
-<td align="right">3.95</td>
+<td align="right">4.07</td>
+<td align="right">3.93</td>
 </tr>
 <tr class="odd">
 <td align="left">omega1</td>
@@ -645,19 +732,19 @@ etas2 &lt;- colMeans(res2$ETA[-burnin, ])</code></pre>
 <td align="left">omega2</td>
 <td align="right">1.000</td>
 <td align="right">1.05</td>
-<td align="right">1.04</td>
+<td align="right">1.05</td>
 </tr>
 <tr class="odd">
 <td align="left">alpha1</td>
 <td align="right">-3.000</td>
-<td align="right">-3.00</td>
+<td align="right">-2.98</td>
 <td align="right">-2.98</td>
 </tr>
 <tr class="even">
 <td align="left">alpha2</td>
 <td align="right">0.000</td>
-<td align="right">-0.04</td>
-<td align="right">0.07</td>
+<td align="right">-0.10</td>
+<td align="right">0.09</td>
 </tr>
 <tr class="odd">
 <td align="left">eta1</td>
@@ -679,39 +766,39 @@ etas2 &lt;- colMeans(res2$ETA[-burnin, ])</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th></th>
-<th align="left">test</th>
-<th align="right">replications</th>
-<th align="right">elapsed</th>
-<th align="right">relative</th>
-<th align="right">user.self</th>
-<th align="right">sys.self</th>
-<th align="right">user.child</th>
-<th align="right">sys.child</th>
+<th align="right">te</th>
+<th>st r</th>
+<th>eplications e</th>
+<th>lapsed r</th>
+<th>elative u</th>
+<th>ser.self s</th>
+<th>ys.self u</th>
+<th>ser.child s</th>
+<th align="left">ys.child</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>2</td>
-<td align="left">skewnormal.gibbs(xx, K = 2, nsim = 200, thin = 1)</td>
-<td align="right">3</td>
-<td align="right">10.485</td>
-<td align="right">6.114</td>
-<td align="right">9.546</td>
-<td align="right">0.928</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">2</td>
+<td>skewnormal.gibbs(xx, K = 2, nsim = 200, thin = 1)</td>
+<td>3</td>
+<td>10.372</td>
+<td>6.174</td>
+<td>9.410</td>
+<td>0.927</td>
+<td>0</td>
+<td align="left">0</td>
 </tr>
 <tr class="even">
-<td>1</td>
-<td align="left">skewNormalCpp(r = xx, K = 2, nsim = 200)</td>
-<td align="right">3</td>
-<td align="right">1.715</td>
-<td align="right">1.000</td>
-<td align="right">1.532</td>
-<td align="right">0.182</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">1</td>
+<td>skewNormalCpp(r = xx, K = 2, nsim = 200)</td>
+<td>3</td>
+<td>1.680</td>
+<td>1.000</td>
+<td>1.501</td>
+<td>0.178</td>
+<td>0</td>
+<td align="left">0</td>
 </tr>
 </tbody>
 </table>
