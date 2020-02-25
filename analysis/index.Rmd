@@ -36,14 +36,14 @@ The main functions you need are:
 1. <tt>wflow_start()</tt> -- Start a new project
 1. <tt>wflow_build()</tt> -- Render Rmarkdown and display html
 1. <tt>wflow_status()</tt> -- show status of project/files needed to be committed
-1. <tt>wflow_publish()</tt> -- deploy website, push to github/gitlab
+1. <tt>wflow_publish()</tt> -- deploy website, commit to github/gitlab
+1. <tt>wflow_git_push()</tt> -- push changes
 
 Other useful functions are:
 
 * <tt>wflow_git_commit()</tt> (commit without publishing)
-* <tt>wflow_git_push()</tt> (push without publishing)
 * <tt>wflow_git_pull()</tt>
-* <tt>wflow_git_pull()</tt>
+* <tt>wflow_git_config()</tt>
 
 When deploying your website to the internet, note that github pages doesn't allow
 for private sites. If privacy is a large concern in your research, consider using
