@@ -31,6 +31,14 @@ directories and files:
 
 ## devtools
 
-# Starting an Rcpp Project
+* <tt>devtools::use_rcpp()</tt> to set your package up with Rcpp. This will
+  * create a src/ directory for your compiled code
+  * Add Rcpp to the LinkingTo and Imports fields in the DESCRIPTION.
+  * Set up your .gitignore to ignore compiled output files
+  * Give you roxygen flags to add to your package
 
-# Documentation
+roxygen can be used to add documentation to your C++ written functions in the
+usual with, but with <tt>//'</tt> instead of <tt>#'</tt>.
+
+## Exporting/importing C++ code
+Use header (.h) files to make your C++ functions callable elsewhere.
