@@ -8,7 +8,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-### Avoiding R bottlenecks with Rcpp
+# Avoiding R bottlenecks with Rcpp
 
 I will introduce the Rcpp package for streamlining R code with C++ functions
 to avoid some common computational bottlenecks when writing R functions in a
@@ -23,7 +23,7 @@ This document is broken into three main sections:
 1. [Building a package](packages.html)
 1. [Case study: Skew Normal Mixture distributions](sn_mix.html)
 
-## Using workflowr
+# Using workflowr
 This document was created using <tt>workflowr</tt>. WorkflowR is an R package
 that allows for an effective and reproducible way to share organize your projects
 and share your results with collaborators and advisors. The benefit of <tt>workflowr</tt>
