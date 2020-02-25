@@ -70,7 +70,9 @@ Gibbs sampling is still feasible. See
 'Bayesian inference for finite mixtures of univariate and multivariate skew-normal and skew-t distributions.'
 by Früwirth-Schnatter, Pyne (2010) for derivations and greater detail.
 
-```{r load_packages, echo = TRUE}
+See github.com/scristia/SkewNormalMix for an implementation of this model.
+
+```{r load_packages, warning=FALSE, message=FALSE, results="hide", echo = TRUE}
 # Load packages
 library(tidyverse)
 library(devtools)
@@ -106,7 +108,8 @@ Ey <- mu+omega2*delta*sqrt(2/3.1415)
 psi <- omega*delta
 sigma2 <- omega2*(1-delta^2)
 K = 2
-nsim=10000
+# nsim=10000
+nsim=2000
 burnin <- 1:500
 ```
 
