@@ -1,0 +1,173 @@
+---
+title: "Skew normal mixture"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+
+
+<style type="text/css">
+
+body{ /* Normal  */
+      font-size: 18px;
+  }
+td {  /* Table  */
+  font-size: 8px;
+}
+h1.title {
+  font-size: 38px;
+  color: DarkRed;
+}
+h1 { /* Header 1 */
+  font-size: 28px;
+  color: DarkBlue;
+}
+h2 { /* Header 2 */
+    font-size: 22px;
+  color: DarkBlue;
+}
+h3 { /* Header 3 */
+  font-size: 18px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkBlue;
+}
+code.r{ /* Code block */
+    font-size: 18px;
+}
+pre { /* Code block - determines code spacing between lines */
+    font-size: 14px;
+}
+</style>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Objectives
+
+Normal mixture models are a popular method of distribution based clustering.
+Despite this, in practice they often don't work well as slight departures
+from normality lead to poor model fit. One way to remedy this is to use a more
+robust distribution for clustering, such as adding additional parameters
+for kurtosis (i.e. t-distribution) or skewness.
+
+A finite dimensional mixture of skew-normal distributions assumes data
+$y = (y_1, \ldots, y_n) \in R^n$ are a sample from a probability density function
+of the form
+$$
+  f_{SN}(y; \xi, \omega^2, \alpha) = \frac{2}{\omega}
+  \phi\left( \frac{y - \xi}{\omega}\right) \Phi(\alpha \omega^{-1}(y - \xi))
+$$
+where $\alpha$ is a skewness parameter.
+
+Full conditionals are available for the proper parameter transformations and
+Gibbs sampling is still feasible. See
+'Bayesian inference for finite mixtures of univariate and multivariate skew-normal and skew-t distributions.'
+by Früwirth-Schnatter, Pyne (2010) for derivations and greater detail.
+
+```{r load_packages, echo = TRUE}
+# Load packages
+library(tidyverse)
+library(devtools)
+#install_github("scristia/SkewNormalMix")
+load_all("~/Software/SkewNormalMix")
+
+library(sn)
+library(mvtnorm)
+library(msm)
+library(MASS)
+library(gtools)
+library(truncnorm)
+```
+
+```{r simulate_data, echo=TRUE}
+# simulated data
+omega <- c(4, 1)
+omega2 <- omega^2
+alpha <- c(-3, 0)
+mu <- c(0, 4)
+
+xx <- c(rsn(5000, mu[1], omega[1], alpha[1]), rsn(8000, mu[2], omega[2], alpha[2]))
+xx <- xx[sample.int(8000)]
+par(bg="white")
+plot(density(xx), type="l")
+
+n <- length(xx)
+
+
+##transformations
+delta <- alpha/sqrt(1+alpha^2)
+Ey <- mu+omega2*delta*sqrt(2/3.1415)
+psi <- omega*delta
+sigma2 <- omega2*(1-delta^2)
+K = 2
+nsim=10000
+burnin <- 1:500
+```
+
+R implementation of function:
+
+```{r, echo = TRUE, results="hide", warning=FALSE}
+set.seed(4321)
+res = skewnormal.gibbs(xx, K=K, nsim=nsim)
+mus <- colMeans(res$MU[-burnin, ])
+omegas <- colMeans(res$OMEGA[-burnin, ])
+alphas <- colMeans(res$ALPHA[-burnin, ])
+etas <- colMeans(res$ETA[-burnin, ])
+
+```
+
+Rcpp implementation of function:
+
+```{r, echo = TRUE, results="hide", warning=FALSE}
+set.seed(4321)
+res2 <- skewNormalCpp(r=xx, K=K, nsim=nsim)
+mus2 <- colMeans(res2$MU[-burnin, ])
+omegas2 <- colMeans(res2$OMEGA[-burnin, ])
+alphas2 <- colMeans(res2$ALPHA[-burnin, ])
+etas2 <- colMeans(res2$ETA[-burnin, ])
+```
+
+Check posterior fit:
+
+```{r, echo=FALSE}
+lim <- range(xx, na.rm=TRUE)
+par(las=1, mfrow=c(1,1), mar=c(4, 4, 4, 4), bg="white")
+hist(xx, breaks = 500, col='lightgray', border='gray', freq=FALSE, main="",
+     xlim=lim)
+y2 <- seq(min(xx), max(xx), len=5000)
+#post.dens <- pis[1]*dsn(y2, mus[1], omegas[1], alphas[1] ) + pis[2]*dsn(y2, mus[2], omegas[2], alphas[2])
+#lines(y2, post.dens,lwd=2)
+#mx <- max(post.dens)
+for(k in 1:K) lines(y2, etas2[k]*dsn(y2, mus2[k], omegas2[k], alphas2[k] ), col="gray40", lty=2, lwd=2)
+lines(y2, rowSums(sapply(1:K, function(x) etas2[x]*dsn(y2, mus2[x], omegas2[x], alphas2[x]))), col="skyblue3", lwd=2)
+```
+
+Check truth:
+
+```{r, echo=FALSE}
+knitr::kable(tibble("Parameter" = c("mu1", "mu2", "omega1", "omega2",
+                           "alpha1", "alpha2", "eta1", "eta2"),
+           "Truth" = c(mu, omega, alpha, c(8/13, 5/13)),
+           "Estimate (R)" = round(c(mus, omegas, alphas, etas), 2),
+           "Estimate (Rcpp)" = round(c(mus2, omegas2, alphas2, etas2),2)),
+      digits=3)
+
+```
+
+## Benchmarking
+```{r, results="hide"}
+library(rbenchmark)
+res <- benchmark(skewNormalCpp(r=xx, K=2, nsim=200),
+          skewnormal.gibbs(xx, K=2, nsim=200, thin=1),
+          replications=3)
+```
+
+```{r, echo=FALSE}
+knitr::kable(res, digits=3)
+```

@@ -1,0 +1,36 @@
+---
+title: "Rcpp in Packages"
+Author: "Stephen Cristiano"
+output:
+  workflowr::wflow_html:
+    toc: true
+editor_options:
+  chunk_output_type: console
+---
+
+
+## Anatomy of an R Package
+
+Inspection of R source code for any R package will reveal the following
+directories and files:
+
+* R: for R functions
+* vignettes: Latex papers weaving R code and indicating the intended workflow
+  of an analysis
+* man: documentation for exported R functions
+* src: compiled code
+* DESCRIPTION: file provides a brief description of the project, a version
+  number, and any packages for which your package depends.
+
+# Using Rcpp:
+
+* All compiled code goes in package/src directory
+* Code in src/ will be automatically compiled and shared
+  libraries created when building the package.
+* Instantiate an Rcpp package: Rcpp.package.skeleton
+
+## devtools
+
+# Starting an Rcpp Project
+
+# Documentation
