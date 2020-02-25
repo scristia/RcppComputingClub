@@ -24,4 +24,29 @@ This document is broken into three main sections:
 1. [Case study: Skew Normal Mixture distributions](sn_mix.html)
 
 ## Using workflowr
-This document was created using <tt>workflowr</tt>.
+This document was created using <tt>workflowr</tt>. WorkflowR is an R package
+that allows for an effective and reproducible way to share organize your projects
+and share your results with collaborators and advisors. The benefit of <tt>workflowr</tt>
+is that it allows you to build an organized project template with analyses in
+<tt>Rmarkdown</tt>, use git to version control and push to github or gitlab, and
+publish your results to a website with only a handful of function calls within R.
+
+The main functions you need are:
+
+1. <tt>wflow_start()</tt> -- Start a new project
+1. <tt>wflow_build()</tt> -- Render Rmarkdown and display html
+1. <tt>wflow_status()</tt> -- show status of project/files needed to be committed
+1. <tt>wflow_publish()</tt> -- deploy website, push to github/gitlab
+
+Other useful functions are:
+
+* <tt>wflow_git_commit()</tt> (commit without publishing)
+* <tt>wflow_git_push()</tt> (push without publishing)
+* <tt>wflow_git_pull()</tt>
+* <tt>wflow_git_pull()</tt>
+
+When deploying your website to the internet, note that github pages doesn't allow
+for private sites. If privacy is a large concern in your research, consider using
+gitlab instead.
+
+Learn more here: https://jdblischak.github.io/workflowr/
